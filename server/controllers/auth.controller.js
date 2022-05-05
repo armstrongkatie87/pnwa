@@ -54,6 +54,7 @@ const signout = (req, res) => {
 //add requireSignin to any route should be protected against unauthenticated access
 const requireSignin = expressJwt({
   secret: config.jwtSecret,
+  algorithms: ['HS256'],// add to fix if (!options.algorithms) throw new Error('algorithms should be set')
   userProperty: 'auth'
 })
 //add hasAuthorization to routes req both authentication & authorization

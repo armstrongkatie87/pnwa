@@ -9,15 +9,17 @@ import Template from './../template'
 import userRoutes from './routes/user.routes'
 import authRoutes from './routes/auth.routes'
 
-// modules for server side rendering
+// modules used for server side rendering
+//1. React modules req'd to render the React components and use renderToString
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
-import MainRouter from './../client/MainRouter'
-import { StaticRouter } from 'react-router-dom'
-
+//2. Router modules
+import MainRouter from './../client/MainRouter' //MainRouter is root component in our frontend
+import { StaticRouter } from 'react-router-dom' //StaticRouter is a stateless router that takes the req'd URL to match w/frontend route declared in MainRouter component
+//3. Material-UI modules & Custom Theme-help generate CSS styles for frontend 
 import { ServerStyleSheets, ThemeProvider } from '@material-ui/styles'
 import theme from './../client/theme'
-//end
+//end 
 
 //comment out before building for production
 import devBundle from './devBundle'
@@ -44,6 +46,9 @@ app.use('/dist', express.static(path.join(CURRENT_WORKING_DIR, 'dist')))
 app.use('/', userRoutes)
 app.use('/', authRoutes)
 
+//1. Generate CSS styles using Material-UIs ServerStyleSheets
+//2. Use renderToString to generate markup which renders components specific to the route requested.
+//3. Return template with markup & CSS styles in the response
 app.get('*', (req, res) => {
   const sheets = new ServerStyleSheets()
   const context = {}
@@ -55,12 +60,12 @@ app.get('*', (req, res) => {
             </ThemeProvider>
           </StaticRouter>
         )
-    )
+    )//once markup generated ck if redirect rendered to be sent in markup
     if (context.url) {
       return res.redirect(303, context.url)
-    }
+    }//if no redirect get CSS string f/sheets using sheets.toString
     const css = sheets.toString()
-    res.status(200).send(Template({
+    res.status(200).send(Template({//return Template back w/markup & CSS injected
       markup: markup,
       css: css
     }))

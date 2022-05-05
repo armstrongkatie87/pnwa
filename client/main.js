@@ -1,8 +1,7 @@
 import React from 'react'
-import { render } from 'react-dom'
-import HelloWorld from './HelloWorld'
+import { hydrate } from 'react-dom'//updated use hydrate instead of render
+import App from './App'
 
+hydrate(<App/>, document.getElementById('root'))
 
-render(<HelloWorld/>, document.getElementById('root'))
-
-//the main.js file simply renders the top-level entry React component in the div element in the HTML doc
+//hydrate f(x) hydrates a container that already has html content rendered by ReactDOMServer; server-rendered markup is preserved & only event handlers are attached when React takes over in browser, allowing initial load performance to be better
